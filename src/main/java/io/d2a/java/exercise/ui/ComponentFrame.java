@@ -1,10 +1,7 @@
 package io.d2a.java.exercise.ui;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
-import java.util.Random;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,7 +15,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
-import javax.swing.plaf.ProgressBarUI;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ComponentFrame extends JFrame implements KeyListener {
 
@@ -51,6 +49,12 @@ public class ComponentFrame extends JFrame implements KeyListener {
         button.setToolTipText("Tooltip!");
 
         final JToggleButton toggleButton = new JToggleButton();
+        toggleButton.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(final ChangeEvent e) {
+                toggleButton.setText(toggleButton.isSelected() ? "A" : "B");
+            }
+        });
         final JCheckBox checkBox = new JCheckBox("enable coolness");
 
         final JComboBox<String> comboBox = new JComboBox<>();
