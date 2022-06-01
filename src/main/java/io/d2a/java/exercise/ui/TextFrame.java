@@ -5,16 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TextFrame extends JFrame {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(TextFrame::new);
+        new TextFrame();
     }
 
     public TextFrame() throws HeadlessException {
@@ -35,10 +32,8 @@ public class TextFrame extends JFrame {
             return;
         }
 
-        final JScrollPane scrollBar = new JScrollPane();
         final JTextArea area = new JTextArea();
-        scrollBar.add(area);
-        this.add(scrollBar);
+        this.add(area);
 
         try {
             final String join = String.join(
