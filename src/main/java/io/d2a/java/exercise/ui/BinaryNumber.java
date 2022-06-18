@@ -22,13 +22,14 @@ public class BinaryNumber extends JFrame {
         new BinaryNumber();
     }
 
-    public static final boolean DEFAULT_HARDCORE = true;
+    public static final boolean DEFAULT_HARDCORE = false;
     public static final int NUMBER_OF_CONTROLS = 12;
-    public static final BigInteger TWO = new BigInteger("2");
+    public static final BigInteger BASE = new BigInteger("1337");
 
-    private boolean hardcore = DEFAULT_HARDCORE;
     private final JLabel resultLabel = new JLabel("0", JLabel.CENTER);
     private final JToggleButton[] buttons = new JToggleButton[NUMBER_OF_CONTROLS];
+
+    private boolean hardcore = DEFAULT_HARDCORE;
 
     public BinaryNumber() {
         final JPanel main = new JPanel();
@@ -51,9 +52,10 @@ public class BinaryNumber extends JFrame {
         }
 
         for (int i = 0; i < NUMBER_OF_CONTROLS; i++) {
-            final JLabel label = new JLabel("2 " + StringConverter.toPowString(
-                NUMBER_OF_CONTROLS - i - 1
-            ), JLabel.CENTER);
+            final JLabel label = new JLabel(
+                BASE.toString() + StringConverter.toPowString(NUMBER_OF_CONTROLS - i - 1),
+                JLabel.CENTER
+            );
             buttonPanel.add(label);
         }
 
@@ -84,11 +86,11 @@ public class BinaryNumber extends JFrame {
 
         for (int i = 0; i < buttons.length; i++) {
             if (buttons[i].isSelected()) {
-                result = result.add(TWO.pow(i));
+                result = result.add(BASE.pow(i));
                 if (bob.length() > 0) {
                     bob.append(" + ");
                 }
-                bob.append("2").append(StringConverter.toPowString(i));
+                bob.append(BASE).append(StringConverter.toPowString(i));
             }
         }
 
