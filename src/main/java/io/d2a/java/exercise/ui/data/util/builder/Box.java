@@ -1,10 +1,12 @@
-package io.d2a.java.exercise.ui.data.builder;
+package io.d2a.java.exercise.ui.data.util.builder;
 
+import io.d2a.java.exercise.ui.data.util.Withy;
+import io.d2a.java.exercise.ui.data.util.presets.Geritt;
 import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-public class Box extends JPanel {
+public class Box extends JPanel implements Withy<Box> {
 
     public enum Direction {
         HORIZONTAL,
@@ -16,16 +18,23 @@ public class Box extends JPanel {
             case HORIZONTAL -> BoxLayout.X_AXIS;
             default -> BoxLayout.Y_AXIS;
         };
-
         // noinspection MagicConstant
         this.setLayout(new BoxLayout(this, axis));
     }
 
+    @Override
     public Box with(final Component component) {
         this.add(component);
         return this;
     }
 
+    @Override
+    public Box with(final Geritt geritt) {
+        this.add(geritt.build());
+        return this;
+    }
+
+    @Override
     public Box all(final Component...components){
         for (final Component component : components) {
             this.add(component);

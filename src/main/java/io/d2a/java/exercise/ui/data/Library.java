@@ -1,10 +1,10 @@
 package io.d2a.java.exercise.ui.data;
 
-import io.d2a.java.exercise.ui.data.builder.Botton;
-import io.d2a.java.exercise.ui.data.builder.Box;
-import io.d2a.java.exercise.ui.data.builder.Box.Direction;
-import io.d2a.java.exercise.ui.data.builder.Flow;
-import io.d2a.java.exercise.ui.data.builder.Grid;
+import io.d2a.java.exercise.ui.data.util.builder.Botton;
+import io.d2a.java.exercise.ui.data.util.builder.Box;
+import io.d2a.java.exercise.ui.data.util.builder.Box.Direction;
+import io.d2a.java.exercise.ui.data.util.builder.Flow;
+import io.d2a.java.exercise.ui.data.util.builder.Grid;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

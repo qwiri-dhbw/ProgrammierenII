@@ -1,4 +1,4 @@
-package io.d2a.java.exercise.ui.data.builder;
+package io.d2a.java.exercise.ui.data.util.builder;
 
 import java.awt.event.ActionListener;
 import javax.swing.JButton;

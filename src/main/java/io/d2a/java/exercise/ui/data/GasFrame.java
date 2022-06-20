@@ -1,31 +1,58 @@
 package io.d2a.java.exercise.ui.data;
 
-import io.d2a.java.exercise.ui.data.builder.Botton;
-import io.d2a.java.exercise.ui.data.builder.Box;
-import io.d2a.java.exercise.ui.data.builder.Box.Direction;
-import io.d2a.java.exercise.ui.data.builder.Grid;
+import io.d2a.java.exercise.ui.data.util.builder.Botton;
+import io.d2a.java.exercise.ui.data.util.builder.Box;
+import io.d2a.java.exercise.ui.data.util.builder.Box.Direction;
+import io.d2a.java.exercise.ui.data.util.presets.Geritt;
+import io.d2a.java.exercise.ui.data.util.builder.TextField;
+import io.d2a.java.exercise.ui.data.util.TextFieldGroup;
+import io.d2a.java.exercise.ui.data.util.presets.PaddedFrame;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-public class GasFrame extends JFrame {
+public class GasFrame extends PaddedFrame {
 
     public static void main(String[] args) {
         new GasFrame();
     }
 
+    /**
+     * Map that contains gas station name -> gas station prices
+     */
     private final Map<String, GasStation> gasStationsMap = new HashMap<>();
 
-    private final JTextField stationNameField = new JTextField();
-    private final JTextField dieselField = new JTextField();
-    private final JTextField superE5Field = new JTextField();
-    private final JTextField superE10Field = new JTextField();
+    private final TextField stationNameField = new TextField();
+    private final TextField dieselField = new TextField();
+    private final TextField superE5Field = new TextField();
+    private final TextField superE10Field = new TextField();
+
+    private final TextFieldGroup group = new TextFieldGroup(
+        stationNameField,
+        dieselField,
+        superE5Field,
+        superE5Field
+    );
+
+    public GasFrame() {
+        super("Gas Stations");
+        this.add(new Box(Direction.VERTICAL)
+            .with(new Geritt()
+                .with("Station Name", this.stationNameField)
+                .with("Diesel", this.dieselField)
+                .with("Super E5", this.superE5Field)
+                .with("Super E10", this.superE10Field))
+            .with(new Box(Direction.HORIZONTAL)
+                .with(new Botton("Save").click(this::handleSave))
+                .with(new Botton("Show all").click(this::handleShowAll)))
+        );
+        this.pack();
+    }
+
+    ///
 
     private void handleSave(final ActionEvent event) {
         final String stationName = this.stationNameField.getText().strip();
@@ -50,46 +77,23 @@ public class GasFrame extends JFrame {
             "Meldung",
             JOptionPane.INFORMATION_MESSAGE
         );
+        // clear text boxes
+        this.group.clear();
     }
 
     private void handleShowAll(final ActionEvent event) {
-        final StringBuilder bob = new StringBuilder();
-        this.gasStationsMap.keySet().stream().sorted().forEach(k -> {
-            if (bob.length() > 0) {
-                bob.append('\n');
-            }
-            bob.append(k).append(": ").append(this.gasStationsMap.get(k));
-        });
-
         JOptionPane.showMessageDialog(
             null,
-            bob.toString(),
+            this.gasStationsMap.keySet().stream()
+                .sorted()
+                .map(key -> key + ": " + this.gasStationsMap.get(key))
+                .collect(Collectors.joining("\n")),
             "Meldung",
             JOptionPane.INFORMATION_MESSAGE
         );
     }
 
-    public GasFrame() {
-        this.setTitle("Gas Stations");
-        this.add(new Box(Direction.VERTICAL)
-            .with(new Grid(4, 2)
-                .with(new JLabel("Station Name"))
-                .with(stationNameField)
-                .with(new JLabel("Diesel"))
-                .with(dieselField)
-                .with(new JLabel("Super E5"))
-                .with(superE5Field)
-                .with(new JLabel("Super E10"))
-                .with(superE10Field))
-            .with(new Box(Direction.HORIZONTAL)
-                .with(new Botton("Save")
-                    .click(this::handleSave))
-                .with(new Botton("Show all")
-                    .click(this::handleShowAll)))
-        );
-        this.pack();
-        this.setVisible(true);
-    }
+    ///
 
     private double parse(final JTextComponent textComponent) {
         return this.parse(textComponent.getText());
