@@ -13,14 +13,5 @@ public class TextFieldGroup {
         this.fields.addAll(Arrays.asList(fields));
     }
 
-    public void setText(final String newText) {
-        for (final TextField field : this.fields) {
-            field.setText(newText);
-        }
-    }
-
-    public void clear() {
-        this.setText("");
-    }
 
 }

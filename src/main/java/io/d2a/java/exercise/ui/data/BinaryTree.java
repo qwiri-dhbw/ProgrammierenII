@@ -113,6 +113,11 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         return result;
     }
 
+    public int size() {
+        return (this.left != null ? this.left.size() : 0) +
+            (this.right != null ? this.right.size() : 0) + 1;
+    }
+
     // toString method
     @Override
     public String toString() {
@@ -138,8 +143,8 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
     ///
 
     public static void main(String[] args) throws Exception {
-        final Integer[] values = new Integer[] {
-            15, 10, 0, 1, 1, 2, 3, 3, 1, 3, 11, 41, 166, 41,21, 4, 99, 187, 1337, 420, 69
+        final Integer[] values = new Integer[]{
+            15, 10, 0, 1, 1, 2, 3, 3, 1, 3, 11, 41, 166, 41, 21, 4, 99, 187, 1337, 420, 69
         };
         final BinaryTree<Integer> root = new BinaryTree<>(values[0]);
         for (int i = 1; i < values.length; i++) {
@@ -148,10 +153,7 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         }
         System.out.println(root);
         System.out.println(root.traverse());
-
-        for (final Integer integer : root) {
-            System.out.println(integer);
-        }
+        System.out.println(root.size());
     }
 
 }

@@ -3,16 +3,14 @@ package io.d2a.java.exercise.ui.data;
 import io.d2a.java.exercise.ui.data.util.builder.Botton;
 import io.d2a.java.exercise.ui.data.util.builder.Box;
 import io.d2a.java.exercise.ui.data.util.builder.Box.Direction;
-import io.d2a.java.exercise.ui.data.util.presets.Geritt;
 import io.d2a.java.exercise.ui.data.util.builder.TextField;
-import io.d2a.java.exercise.ui.data.util.TextFieldGroup;
+import io.d2a.java.exercise.ui.data.util.presets.Geritt;
 import io.d2a.java.exercise.ui.data.util.presets.PaddedFrame;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
-import javax.swing.text.JTextComponent;
 
 public class GasFrame extends PaddedFrame {
 
@@ -25,22 +23,16 @@ public class GasFrame extends PaddedFrame {
      */
     private final Map<String, GasStation> gasStationsMap = new HashMap<>();
 
+    private final Geritt geritt;
     private final TextField stationNameField = new TextField();
     private final TextField dieselField = new TextField();
     private final TextField superE5Field = new TextField();
     private final TextField superE10Field = new TextField();
 
-    private final TextFieldGroup group = new TextFieldGroup(
-        stationNameField,
-        dieselField,
-        superE5Field,
-        superE5Field
-    );
-
     public GasFrame() {
         super("Gas Stations");
         this.add(new Box(Direction.VERTICAL)
-            .with(new Geritt()
+            .with(this.geritt = new Geritt()
                 .with("Station Name", this.stationNameField)
                 .with("Diesel", this.dieselField)
                 .with("Super E5", this.superE5Field)
@@ -66,9 +58,9 @@ public class GasFrame extends PaddedFrame {
             return;
         }
         final GasStation station = new GasStation(
-            this.parse(this.dieselField),
-            this.parse(this.superE5Field),
-            this.parse(this.superE10Field)
+            this.dieselField.asDouble(-1D),
+            this.superE5Field.asDouble(-1.),
+            this.superE10Field.asDouble(-1.0)
         );
         this.gasStationsMap.put(stationName, station);
         JOptionPane.showMessageDialog(
@@ -78,7 +70,7 @@ public class GasFrame extends PaddedFrame {
             JOptionPane.INFORMATION_MESSAGE
         );
         // clear text boxes
-        this.group.clear();
+        this.geritt.clear();
     }
 
     private void handleShowAll(final ActionEvent event) {
@@ -91,20 +83,6 @@ public class GasFrame extends PaddedFrame {
             "Meldung",
             JOptionPane.INFORMATION_MESSAGE
         );
-    }
-
-    ///
-
-    private double parse(final JTextComponent textComponent) {
-        return this.parse(textComponent.getText());
-    }
-
-    private double parse(final String inp) {
-        try {
-            return Double.parseDouble(inp);
-        } catch (final NumberFormatException nfex) {
-            return -1;
-        }
     }
 
 }

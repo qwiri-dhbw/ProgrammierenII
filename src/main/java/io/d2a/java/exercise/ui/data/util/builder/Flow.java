@@ -1,7 +1,6 @@
 package io.d2a.java.exercise.ui.data.util.builder;
 
 import io.d2a.java.exercise.ui.data.util.Withy;
-import io.d2a.java.exercise.ui.data.util.presets.Geritt;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
@@ -19,8 +18,8 @@ public class Flow extends JPanel implements Withy<Flow> {
     }
 
     @Override
-    public Flow with(final Geritt geritt) {
-        this.add(geritt.build());
+    public Flow with(final ComponentBuilder<?> builder) {
+        this.add(builder.build());
         return this;
     }
 

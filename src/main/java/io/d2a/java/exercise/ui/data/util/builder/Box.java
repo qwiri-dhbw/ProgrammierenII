@@ -1,7 +1,6 @@
 package io.d2a.java.exercise.ui.data.util.builder;
 
 import io.d2a.java.exercise.ui.data.util.Withy;
-import io.d2a.java.exercise.ui.data.util.presets.Geritt;
 import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -29,8 +28,8 @@ public class Box extends JPanel implements Withy<Box> {
     }
 
     @Override
-    public Box with(final Geritt geritt) {
-        this.add(geritt.build());
+    public Box with(final ComponentBuilder<?> builder) {
+        this.add(builder.build());
         return this;
     }
 

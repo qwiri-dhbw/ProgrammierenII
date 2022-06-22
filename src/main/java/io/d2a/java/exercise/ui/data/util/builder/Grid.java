@@ -1,7 +1,6 @@
 package io.d2a.java.exercise.ui.data.util.builder;
 
 import io.d2a.java.exercise.ui.data.util.Withy;
-import io.d2a.java.exercise.ui.data.util.presets.Geritt;
 import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
@@ -19,8 +18,8 @@ public class Grid extends JPanel implements Withy<Grid> {
     }
 
     @Override
-    public Grid with(final Geritt geritt) {
-        this.add(geritt.build());
+    public Grid with(final ComponentBuilder<?> builder) {
+        this.add(builder.build());
         return this;
     }
 
