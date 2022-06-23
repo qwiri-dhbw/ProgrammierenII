@@ -16,7 +16,6 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         this.value = value;
     }
 
-
     public boolean add(final T value) {
         switch (value.compareTo(this.value)) {
             case -1:
