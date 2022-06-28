@@ -5,9 +5,9 @@ import io.d2a.java.exercise.ui.data.util.presets.PaddedFrame;
 import io.d2a.util.ColorRainbow;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 public class DancingText extends PaddedFrame implements Runnable {
 
@@ -16,15 +16,15 @@ public class DancingText extends PaddedFrame implements Runnable {
         dancingText.thread.join();
     }
 
-    private final Letters letters = new Letters("Dancing Text :-)");
+    private final Letters letters = new Letters("Dancing Text :-) Hello World what's up?");
     private final Thread thread;
 
     public DancingText() {
         super("Dancing Text");
         this.setSize(720, 480);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         final TextComponent comp = new TextComponent();
-        comp.setPreferredSize(this.getSize());
         this.add(comp);
 
         this.thread = new Thread(this);
@@ -33,6 +33,7 @@ public class DancingText extends PaddedFrame implements Runnable {
 
 
     @Override
+    @SuppressWarnings({"InfiniteLoopStatement", "BusyWait"})
     public void run() {
         while (true) {
             try {
@@ -44,12 +45,13 @@ public class DancingText extends PaddedFrame implements Runnable {
         }
     }
 
-    public class TextComponent extends JPanel implements MouseMotionListener {
+    public class TextComponent extends JPanel implements MouseInputListener {
         private static final Font font = new Font("Comic Code Ligatures", Font.BOLD, 32);
         float hue = 0;
 
         public TextComponent() {
             this.addMouseMotionListener(this);
+            this.addMouseListener(this);
         }
 
         @Override
@@ -57,6 +59,7 @@ public class DancingText extends PaddedFrame implements Runnable {
             if (DancingText.this.letters == null) {
                 return;
             }
+            this.setPreferredSize(DancingText.this.getSize());
 
             // set background color
             g.setColor(Color.LIGHT_GRAY);
@@ -99,6 +102,35 @@ public class DancingText extends PaddedFrame implements Runnable {
             final double multiplierClinch = (double) e.getY() / (getHeight() / 2.0);
             DancingText.this.letters.setMultiplierFreq(multiplierFreq);
             DancingText.this.letters.setMultiplierClench(multiplierClinch);
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            DancingText.this.letters.toggle();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // hier könnte Ihre Werbung stehen
+            // https://github.com/darmiel/sponsors
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // hier könnte Ihre Werbung stehen
+            // https://github.com/darmiel/sponsors
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            // hier könnte Ihre Werbung stehen
+            // https://github.com/darmiel/sponsors
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            // hier könnte Ihre Werbung stehen
+            // https://github.com/darmiel/sponsors
         }
 
     }

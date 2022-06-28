@@ -8,6 +8,7 @@ public class Letters {
     private double cycle = 0;
     private double multiplierFreq = .5;
     private double multiplierClench = 1.0;
+    private boolean mode = true;
 
     public Letters(final String text) {
         int i = 1;
@@ -16,8 +17,12 @@ public class Letters {
         }
     }
 
-    private static double f(final double charIndex, final double cycle) {
-        return Math.sin((charIndex + cycle) / 2.0);
+    private  double f(final double charIndex) {
+        if (this.mode) {
+            return Math.sin((charIndex + this.cycle) / 2.0);
+        } else {
+            return Math.tan((charIndex + this.cycle) / 2.0);
+        }
     }
 
     private final List<Letter> letters = new ArrayList<>();
@@ -35,6 +40,10 @@ public class Letters {
         this.letters.forEach(Letter::cycle);
     }
 
+    public void toggle() {
+        this.mode = !this.mode;
+    }
+
     public class Letter {
         private final char c;
         private final int index;
@@ -46,7 +55,7 @@ public class Letters {
         }
 
         public void cycle() {
-            this.y = (int) (f(this.index * multiplierClench, cycle) * 20);
+            this.y = (int) (f(this.index * multiplierClench) * 20);
         }
 
         public char getC() {
