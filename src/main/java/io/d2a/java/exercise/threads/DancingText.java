@@ -2,9 +2,12 @@ package io.d2a.java.exercise.threads;
 
 import io.d2a.java.exercise.threads.Letters.Letter;
 import io.d2a.java.exercise.ui.data.util.presets.PaddedFrame;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import io.d2a.util.ColorRainbow;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 public class DancingText extends PaddedFrame implements Runnable {
 
@@ -18,7 +21,11 @@ public class DancingText extends PaddedFrame implements Runnable {
 
     public DancingText() {
         super("Dancing Text");
-        this.setSize(600, 300);
+        this.setSize(720, 480);
+
+        final TextComponent comp = new TextComponent();
+        comp.setPreferredSize(this.getSize());
+        this.add(comp);
 
         this.thread = new Thread(this);
         this.thread.start();
@@ -29,7 +36,7 @@ public class DancingText extends PaddedFrame implements Runnable {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(30);
             } catch (InterruptedException ignored) {
             }
             this.letters.cycle();
@@ -37,73 +44,63 @@ public class DancingText extends PaddedFrame implements Runnable {
         }
     }
 
-    static public Color hslColor(float h, float s, float l) {
-        float q, p, r, g, b;
+    public class TextComponent extends JPanel implements MouseMotionListener {
+        private static final Font font = new Font("Comic Code Ligatures", Font.BOLD, 32);
+        float hue = 0;
 
-        if (s == 0) {
-            r = g = b = l; // achromatic
-        } else {
-            q = l < 0.5 ? (l * (1 + s)) : (l + s - l * s);
-            p = 2 * l - q;
-            r = hue2rgb(p, q, h + 1.0f / 3);
-            g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1.0f / 3);
+        public TextComponent() {
+            this.addMouseMotionListener(this);
         }
-        return new Color(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+
+        @Override
+        public void paintComponent(final Graphics g) {
+            if (DancingText.this.letters == null) {
+                return;
+            }
+
+            // set background color
+            g.setColor(Color.LIGHT_GRAY);
+            g.fillRect(0, 0, getWidth(), getHeight());
+
+            // set default color to black and font for text
+            g.setColor(Color.BLACK);
+            g.setFont(font);
+
+            int x = 30;
+            final int yStart = getHeight() / 2;
+
+            // draw separate letters
+            for (final Letter letter : DancingText.this.letters.getLetters()) {
+                // cycle rainbow color
+                g.setColor(ColorRainbow.hslColor(Math.min(1.0f, (hue += .0003) * 1.4f), 1f, .5f));
+                g.drawString(
+                        String.valueOf(letter.getC()),
+                        x += 30,
+                        yStart + letter.getY()
+                );
+            }
+
+            // reset rainbow cycle
+            if (hue >= 1) {
+                hue = 0;
+            }
+        }
+
+
+        @Override
+        public void mouseDragged(final MouseEvent e) {
+            // hier könnte Ihre Werbung stehen
+            // https://github.com/darmiel/sponsors
+        }
+
+        @Override
+        public void mouseMoved(final MouseEvent e) {
+            final double multiplierFreq = (double) e.getX() / (double) getWidth();
+            final double multiplierClinch = (double) e.getY() / (getHeight() / 2.0);
+            DancingText.this.letters.setMultiplierFreq(multiplierFreq);
+            DancingText.this.letters.setMultiplierClench(multiplierClinch);
+        }
+
     }
-    private static float hue2rgb(float p, float q, float h) {
-        if (h < 0) {
-            h += 1;
-        }
 
-        if (h > 1) {
-            h -= 1;
-        }
-
-        if (6 * h < 1) {
-            return p + ((q - p) * 6 * h);
-        }
-
-        if (2 * h < 1) {
-            return q;
-        }
-
-        if (3 * h < 2) {
-            return p + ((q - p) * 6 * ((2.0f / 3.0f) - h));
-        }
-
-        return p;
-    }
-
-    float hue = 0;
-
-    @Override
-    public void paint(final Graphics g) {
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(0, 0, getWidth(), getHeight());
-
-        g.setColor(Color.BLACK);
-        g.setFont(new Font(
-            "Comic Code Ligatures", Font.BOLD, 32
-        ));
-
-        if (this.letters == null) {
-            return;
-        }
-
-        int x = 30;
-        final int yStart = getHeight()/2+20;
-
-        for (final Letter letter : this.letters.getLetters()) {
-            g.setColor(hslColor(Math.min(1.0f, (hue += .004)*1.4f), 1f, .5f));
-            g.drawString(
-                String.valueOf(letter.getC()),
-                x += 30,
-                yStart + letter.getY()
-            );
-        }
-        if (hue >= 1) {
-            hue = 0;
-        }
-    }
 }

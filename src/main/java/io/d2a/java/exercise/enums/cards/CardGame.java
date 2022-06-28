@@ -1,7 +1,8 @@
-package io.d2a.java.exercise.enums;
+package io.d2a.java.exercise.enums.cards;
 
-import io.d2a.java.exercise.enums.PlayingCard.CardValue;
-import io.d2a.java.exercise.enums.PlayingCard.Suit;
+import io.d2a.java.exercise.enums.cards.PlayingCard.CardValue;
+import io.d2a.java.exercise.enums.cards.PlayingCard.Suit;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;

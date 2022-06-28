@@ -1,4 +1,4 @@
-package io.d2a.java.exercise.ui.data;
+package io.d2a.java.exercise.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,23 +16,18 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         this.value = value;
     }
 
-    public boolean add(final T value) {
-        switch (value.compareTo(this.value)) {
-            case -1:
-                if (this.left == null) {
-                    this.left = new BinaryTree<>(value);
-                    return true;
-                }
-                return this.left.add(value);
-            case 1:
-                if (this.right == null) {
-                    this.right = new BinaryTree<>(value);
-                    return true;
-                }
-                return this.right.add(value);
-            default:
-                return false;
+    public static void main(String[] args) throws Exception {
+        final Integer[] values = new Integer[]{
+                15, 10, 0, 1, 1, 2, 3, 3, 1, 3, 11, 41, 166, 41, 21, 4, 99, 187, 1337, 420, 69
+        };
+        final BinaryTree<Integer> root = new BinaryTree<>(values[0]);
+        for (int i = 1; i < values.length; i++) {
+            final int value = values[i];
+            System.out.println("add " + value + " to tree: " + root.add(value));
         }
+        System.out.println(root);
+        System.out.println(root.traverse());
+        System.out.println(root.size());
     }
 
     public T get() {
@@ -112,9 +107,23 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
         return result;
     }
 
-    public int size() {
-        return (this.left != null ? this.left.size() : 0) +
-            (this.right != null ? this.right.size() : 0) + 1;
+    public boolean add(final T value) {
+        final int compare = value.compareTo(this.value);
+        if (compare < 0) {
+            if (this.left == null) {
+                this.left = new BinaryTree<>(value);
+                return true;
+            }
+            return this.left.add(value);
+        }
+        if (compare > 0) {
+            if (this.right == null) {
+                this.right = new BinaryTree<>(value);
+                return true;
+            }
+            return this.right.add(value);
+        }
+        return false;
     }
 
     // toString method
@@ -141,18 +150,9 @@ public class BinaryTree<T extends Comparable<T>> implements Iterable<T> {
     ///
     ///
 
-    public static void main(String[] args) throws Exception {
-        final Integer[] values = new Integer[]{
-            15, 10, 0, 1, 1, 2, 3, 3, 1, 3, 11, 41, 166, 41, 21, 4, 99, 187, 1337, 420, 69
-        };
-        final BinaryTree<Integer> root = new BinaryTree<>(values[0]);
-        for (int i = 1; i < values.length; i++) {
-            final int value = values[i];
-            System.out.println("add " + value + " to tree: " + root.add(value));
-        }
-        System.out.println(root);
-        System.out.println(root.traverse());
-        System.out.println(root.size());
+    public int size() {
+        return (this.left != null ? this.left.size() : 0) +
+                (this.right != null ? this.right.size() : 0) + 1;
     }
 
 }

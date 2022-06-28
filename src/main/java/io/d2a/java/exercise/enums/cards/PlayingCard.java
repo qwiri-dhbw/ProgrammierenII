@@ -1,4 +1,4 @@
-package io.d2a.java.exercise.enums;
+package io.d2a.java.exercise.enums.cards;
 
 public record PlayingCard (Suit suit, CardValue value) implements Comparable<PlayingCard> {
 

@@ -1,4 +1,4 @@
-package io.d2a.java.exercise.ui.data;
+package io.d2a.java.exercise.collections.gas;
 
 public record GasStation(double diesel, double superE5, double superE10) {
 

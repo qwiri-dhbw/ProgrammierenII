@@ -9,8 +9,8 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <maven.compiler.source>16</maven.compiler.source>
-    <maven.compiler.target>16</maven.compiler.target>
+    <maven.compiler.source>18</maven.compiler.source>
+    <maven.compiler.target>18</maven.compiler.target>
   </properties>
 
   <repositories>
@@ -25,6 +25,11 @@
       <groupId>com.github.darmiel</groupId>
       <artifactId>eeee</artifactId>
       <version>f1c3759476</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.darmiel</groupId>
+      <artifactId>swag</artifactId>
+      <version>6c59825f85</version>
     </dependency>
   </dependencies>
 

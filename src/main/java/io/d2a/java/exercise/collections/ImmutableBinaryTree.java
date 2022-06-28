@@ -1,4 +1,4 @@
-package io.d2a.java.exercise.ui.data;
+package io.d2a.java.exercise.collections;
 
 public class ImmutableBinaryTree<T extends Comparable<T>> extends BinaryTree<T> {
 
