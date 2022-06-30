@@ -21,7 +21,7 @@ public class GasFrame extends PaddedFrame {
     /**
      * Map that contains gas station name -> gas station prices
      */
-    private final Map<String, GasStation> gasStationsMap = new HashMap<>();
+    private final Map<String, GasStationPrices> gasStationsMap = new HashMap<>();
 
     private final TextField stationNameField = new TextField();
     private final TextField dieselField = new TextField();
@@ -35,8 +35,7 @@ public class GasFrame extends PaddedFrame {
                         .with("Station Name", this.stationNameField.build())
                         .with("Diesel", this.dieselField)
                         .with("Super E5", this.superE5Field)
-                        .with("Super E10", this.superE10Field)
-                        .build())
+                        .with("Super E10", this.superE10Field))
                 .with(Box.horizontal()
                         .with(new Button("Save").click(this::handleSave))
                         .with(new Button("Show all").click(this::handleShowAll)))
@@ -57,7 +56,7 @@ public class GasFrame extends PaddedFrame {
             );
             return;
         }
-        final GasStation station = new GasStation(
+        final GasStationPrices station = new GasStationPrices(
                 this.dieselField.asDouble(-1D),
                 this.superE5Field.asDouble(-1.),
                 this.superE10Field.asDouble(-1.0)

@@ -1,6 +1,6 @@
 package io.d2a.java.exercise.collections.gas;
 
-public record GasStation(double diesel, double superE5, double superE10) {
+public record GasStationPrices(double diesel, double superE5, double superE10) {
 
     @Override
     public String toString() {
