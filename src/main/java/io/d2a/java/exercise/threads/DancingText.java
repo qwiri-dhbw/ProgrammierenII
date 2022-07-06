@@ -1,7 +1,6 @@
 package io.d2a.java.exercise.threads;
 
 import io.d2a.java.exercise.threads.Letters.Letter;
-import io.d2a.java.exercise.ui.data.util.presets.PaddedFrame;
 import io.d2a.util.ColorRainbow;
 
 import javax.swing.*;
@@ -9,7 +8,7 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class DancingText extends PaddedFrame implements Runnable {
+public class DancingText extends JFrame implements Runnable {
 
     public static final int FPS = 30;
     public static final String TEXT =// "Hallo was geht ABAP?!";
@@ -39,6 +38,8 @@ public class DancingText extends PaddedFrame implements Runnable {
 
         this.setBackground(Color.RED);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+
+        this.setVisible(true);
 
         new Thread(this).start();
     }
