@@ -13,18 +13,20 @@ public class DancingText extends PaddedFrame implements Runnable {
 
     public static final int FPS = 30;
     public static final String TEXT =// "Hallo was geht ABAP?!";
-    // "|||||||||||||||||||||||||||||||||||||||||||||||||||||||";
-         "..........................................................................................";
+            // "|||||||||||||||||||||||||||||||||||||||||||||||||||||||";
+            "...........................................";
+    // ".o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.";
+    //"-------------------------";
+
     public static final Tuple[] PRESETS = {
             new Tuple(Letters.MODE_SIN, 0.2927, 0.6008, 1),
             new Tuple(Letters.MODE_TAN, 0.0501, 0.2840, 1),
             new Tuple(Letters.MODE_TAN, 0.0786, 1.0782, 1),
             new Tuple(Letters.MODE_DIGITAL_SIN, 0.0744, 0.1633, 3.6429),
     };
-    // ".o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.";
-    //"-------------------------";
+
     private final TextComponent comp; // component which displays the text
-    private int WID = 15;
+    private int textCharWidth = 15;
 
     public DancingText(final String text) {
         super("Dancing Text");
@@ -68,9 +70,13 @@ public class DancingText extends PaddedFrame implements Runnable {
 
         private static final Font font = new Font("Comic Code Ligatures", Font.BOLD, 32);
         private final CycleArray<Tuple> preset = new CycleArray<>(PRESETS);
+
         private float hue = 0; // used for rainbow colors
         private int frame = 0;
+
         private int mouseX = 0, mouseY = 0;
+
+        private String status;
 
         public TextComponent(final String text) {
             this.letters = new Letters(text);
@@ -90,32 +96,28 @@ public class DancingText extends PaddedFrame implements Runnable {
 
             // set default color to black if anything goes wrong with the hue
             g.setColor(Color.BLACK);
-            // set color to a large font
-
 
             // widthOfText is the width of the letters in pixel
             // to center the text in the middle
-            final int widthOfText = this.letters.text.length() * WID;
+            final int widthOfText = this.letters.text.length() * textCharWidth;
 
             // x value for the first letter
-            int x = getWidth() / 2 - widthOfText / 2 - WID;
+            int x = getWidth() / 2 - widthOfText / 2 - textCharWidth;
             // y (start) value for the letters
             int yStart = getHeight() / 2;
-
-            // used for "shade" effect, but wasn't worth it.
-            int prevY = 0;
 
             // draw separate letters
             for (final Letter letter : this.letters.getLetters()) {
                 g.setFont(font.deriveFont((float) letter.fontSize));
 
                 // cycle rainbow color
-                g.setColor(ColorRainbow.hslColor(Math.min(1.0f, (hue += .0003) * 1.4f), 1f, .5f));
+                final Color rc = ColorRainbow.hslColor(Math.min(1.0f, (hue += .0003) * 1.4f), 1f, .5f);
+                g.setColor(rc);
                 final int lY = yStart + letter.getY();
 
                 g.drawString(
                         String.valueOf(letter.getC()), /* char */
-                        x += WID, /* x position */
+                        x += textCharWidth, /* x position */
                         lY /* y position */
                 );
 
@@ -124,31 +126,37 @@ public class DancingText extends PaddedFrame implements Runnable {
                     g.drawLine(x + 6, yStart + letter.prevY, x + 6, lY);
                 }
 
-                if (prevY <= lY) {
-                    g.setColor(Color.GRAY);
-                } else {
-                    g.setColor(Color.DARK_GRAY);
+                if (g instanceof Graphics2D g2d) {
+                    final Paint paint = g2d.getPaint();
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    GradientPaint gp = new GradientPaint(mouseX, mouseY, rc, x, lY, Color.BLACK);
+                    g2d.setPaint(gp);
+                    g2d.drawLine(mouseX, mouseY, x, lY);
+                    g2d.setPaint(paint); // reset paint
                 }
-                g.drawLine(mouseX, mouseY, x, lY);
-
-                prevY = lY;
             }
-
 
             // reset rainbow cycle
             if (hue >= 1) {
                 hue = 0;
             }
 
-            g.setFont(this.getFont().deriveFont(12.f));
-
-            // draw debug string
-            g.drawString(String.format("F: %.4f, C: %.4f, A: %.4f, M: %d",
+            // status
+            this.status = "FPS " + FPS + String.format("/%02d        ", this.frame);
+            this.status += String.format("F: %.4f, C: %.4f, A: %.4f, M: %d",
                     this.letters.multiplierFreq,
                     this.letters.multiplierCp,
                     this.letters.multiplierAmp,
-                    this.letters.getModeIndex()
-            ), 20, 20);
+                    this.letters.getModeIndex());
+            this.status += " | click: ☇ Preset :: [shift]click: ☇ Mode, | [shift]move: ↑↓ AMP, ←→ Width :: [opt]move: ↑↓ GZ :: ←→ FREQ";
+
+            g.setFont(this.getFont().deriveFont(12.f));
+            g.setColor(Color.GREEN);
+            g.fillRect(0, getHeight() - 70, getWidth(), 20);
+            g.setColor(g.getColor().darker());
+            g.fillRect(0, getHeight() - 70, 90, 20);
+            g.setColor(Color.BLACK);
+            g.drawString(this.status, 15, this.getHeight() - 56);
         }
 
         @Override
@@ -156,18 +164,12 @@ public class DancingText extends PaddedFrame implements Runnable {
             this.mouseX = e.getX();
             this.mouseY = e.getY();
 
-            if (e.isAltDown()) {
-                return;
-            }
-
             if (e.isShiftDown()) {
                 this.letters.multiplierAmp = .5 + (double) e.getY() / (getHeight() / 6.0);
-                WID = (int) (((double) e.getX() / (double) getHeight()) * 50);
-            } else {
-                final double multiplierFreq = (double) e.getX() / (double) getWidth();
-                final double multiplierClinch = (double) e.getY() / (getHeight() / 2.0);
-                this.letters.multiplierFreq = multiplierFreq;
-                this.letters.multiplierCp = multiplierClinch;
+                textCharWidth = (int) (((double) e.getX() / (double) getHeight()) * 50);
+            } else if (e.isAltDown()) {
+                this.letters.multiplierFreq = (double) e.getX() / (double) getWidth();
+                this.letters.multiplierCp = (double) e.getY() / (getHeight() / 2.0);
             }
         }
 
@@ -217,7 +219,7 @@ public class DancingText extends PaddedFrame implements Runnable {
             // hier könnte Ihre Werbung stehen
             // https://github.com/darmiel/sponsors
         }
-
     }
+
 
 }
