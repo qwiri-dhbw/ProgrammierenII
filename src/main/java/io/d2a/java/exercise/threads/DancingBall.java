@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DancingBall extends JFrame implements Runnable {
 
@@ -15,6 +17,10 @@ public class DancingBall extends JFrame implements Runnable {
     private final Image ballImage;
     private final BallComponent comp; // component which displays the text
     private int frame = 0;
+
+    private final List<Points> points = new ArrayList<>();
+
+    private record Points(int startX, int startY, int endX, int endY) {}
 
     {
         try {
@@ -116,10 +122,16 @@ public class DancingBall extends JFrame implements Runnable {
                 // check collisions
                 if (this.ballLocation.x <= radius || this.ballLocation.x >= (getWidth() - radius)) {
                     this.ballVelocity.x = -this.ballVelocity.x;
+                    if (this.trace != null) {
+                        points.add(new Points(trace.x, trace.y, this.ballLocation.x, this.ballLocation.y));
+                    }
                     this.trace = (Point) this.ballLocation.clone();
                 }
                 if (this.ballLocation.y <= radius || this.ballLocation.y >= (getHeight() - radius)) {
                     this.ballVelocity.y = -this.ballVelocity.y;
+                    if (this.trace != null) {
+                        points.add(new Points(trace.x, trace.y, this.ballLocation.x, this.ballLocation.y));
+                    }
                     this.trace = (Point) this.ballLocation.clone();
                 }
 
@@ -157,11 +169,16 @@ public class DancingBall extends JFrame implements Runnable {
                 }
 
                 if (trace != null) {
+
                     g.setColor(Color.GRAY);
+                    for (Points point : points) {
+                        g.drawLine(point.startX, point.startY, point.endX, point.endY);
+                    }
+
+                    g.setColor(Color.YELLOW);
                     g.drawLine(trace.x, trace.y, this.ballLocation.x, this.ballLocation.y);
 
                     if (this.mouse.mouse != null) {
-                        g.setColor(Color.YELLOW);
                         //g.drawLine(this.mouse.mouse.iX(), this.mouse.mouse.iY(), this.ballLocation.x, this.ballLocation.y);
                     }
                 }
