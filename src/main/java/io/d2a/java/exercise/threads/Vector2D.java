@@ -27,6 +27,17 @@ public class Vector2D {
         );
     }
 
+    public Vector2D add(final Vector2D other) {
+        return new Vector2D(
+                this.x + other.x,
+                this.y + other.y
+        );
+    }
+
+    public Vector2D mult(final double mult) {
+        return new Vector2D(this.x * mult, this.y * mult);
+    }
+
     public Vector2D normalize() {
         final double max = Math.max(Math.abs(this.x), Math.abs(this.y));
         return new Vector2D(

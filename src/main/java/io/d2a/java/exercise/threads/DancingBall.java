@@ -11,7 +11,7 @@ import java.io.IOException;
 public class DancingBall extends JFrame implements Runnable {
 
     public static final int FPS = 60;
-    public static final boolean DRAW_IMAGE = false;
+    public static final boolean DRAW_IMAGE = true;
     private final Image ballImage;
     private final BallComponent comp; // component which displays the text
     private int frame = 0;
@@ -104,12 +104,14 @@ public class DancingBall extends JFrame implements Runnable {
             }
 
             if (this.ballLocation != null && this.ballVelocity != null) {
-                int radius = 60;
+                int radius = 90;
 
-                final Vector2D center = new Vector2D(getWidth() / 2.0, getHeight() / 2.0);
+                /*
+             q   final Vector2D center = new Vector2D(getWidth() / 2.0, getHeight() / 2.0);
                 final double distanceToCenter = center.distance(new Vector2D(this.ballLocation.x, this.ballLocation.y));
 
                 radius += (int) ((((getWidth() / 2.0) - distanceToCenter) / (getWidth() / 2.0)) * 50.0);
+                 */
 
                 // check collisions
                 if (this.ballLocation.x <= radius || this.ballLocation.x >= (getWidth() - radius)) {
@@ -125,7 +127,7 @@ public class DancingBall extends JFrame implements Runnable {
                 if (this.speedster) {
                     this.ballVelocity.decrease(-.05);
                 } else {
-                    this.ballVelocity.decrease(.005);
+                 //   this.ballVelocity.decrease(.005);
                 }
 
                 // move ball
@@ -160,7 +162,7 @@ public class DancingBall extends JFrame implements Runnable {
 
                     if (this.mouse.mouse != null) {
                         g.setColor(Color.YELLOW);
-                        g.drawLine(this.mouse.mouse.iX(), this.mouse.mouse.iY(), this.ballLocation.x, this.ballLocation.y);
+                        //g.drawLine(this.mouse.mouse.iX(), this.mouse.mouse.iY(), this.ballLocation.x, this.ballLocation.y);
                     }
                 }
             }
