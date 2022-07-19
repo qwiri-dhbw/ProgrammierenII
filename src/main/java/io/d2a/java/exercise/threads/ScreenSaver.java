@@ -8,6 +8,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 public class ScreenSaver extends JFrame implements Runnable {
 
@@ -71,6 +72,9 @@ public class ScreenSaver extends JFrame implements Runnable {
             });
         }
 
+        final Random random = new Random();
+        private float bhue = 0;
+
         @Override
         public void paintComponent(final Graphics _g) {
             if (!(_g instanceof Graphics2D g)) {
@@ -78,7 +82,7 @@ public class ScreenSaver extends JFrame implements Runnable {
             }
             this.setPreferredSize(ScreenSaver.this.getSize());
 
-            int stripes = (int) Math.ceil((this.end.position.distance(this.start.position) / getWidth()) * 100);
+            int stripes = (int) Math.ceil((this.end.position.distance(this.start.position) / getWidth()) * 120);
 
             final int maxRadius = Math.min(getHeight(), getWidth()) / 4;
 
@@ -96,7 +100,7 @@ public class ScreenSaver extends JFrame implements Runnable {
             final Vector2D u = this.end.position.sub(this.start.position);
 
             // set background color
-            g.setColor(Color.BLACK);
+            g.setColor(Color.YELLOW);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setStroke(new BasicStroke(2.0f));
 

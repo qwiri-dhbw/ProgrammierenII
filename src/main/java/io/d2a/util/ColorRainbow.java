@@ -5,6 +5,9 @@ import java.awt.*;
 public class ColorRainbow {
 
     public static Color hslColor(float h, float s, float l) {
+        if (h > 1.0) {
+            h %= 1.0;
+        }
         float q, p, r, g, b;
 
         if (s == 0) {

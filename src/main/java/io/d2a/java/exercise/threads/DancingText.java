@@ -7,13 +7,14 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 public class DancingText extends JFrame implements Runnable {
 
     public static final int FPS = 30;
-    public static final String TEXT =// "Hallo was geht ABAP?!";
+    public static final String TEXT = "Hallo was geht ABAP?!";
             // "|||||||||||||||||||||||||||||||||||||||||||||||||||||||";
-            "...........................................";
+            // "...........................................";
     // ".o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.";
     //"-------------------------";
 
@@ -79,6 +80,9 @@ public class DancingText extends JFrame implements Runnable {
 
         private String status;
 
+        private final Random random = new Random();
+        private final String[] fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
         public TextComponent(final String text) {
             this.letters = new Letters(text);
             this.addMouseMotionListener(this);
@@ -109,7 +113,10 @@ public class DancingText extends JFrame implements Runnable {
 
             // draw separate letters
             for (final Letter letter : this.letters.getLetters()) {
-                g.setFont(font.deriveFont((float) letter.fontSize));
+
+                final Font font = new Font(fontNames[random.nextInt(fontNames.length)], Font.BOLD, letter.fontSize);
+                g.setFont(font);
+                // g.setFont(font.deriveFont((float) letter.fontSize));
 
                 // cycle rainbow color
                 final Color rc = ColorRainbow.hslColor(Math.min(1.0f, (hue += .0003) * 1.4f), 1f, .5f);
